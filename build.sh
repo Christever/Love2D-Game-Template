@@ -5,9 +5,9 @@ cd "$(dirname "$0")"
 
 PROJECT_NAME="Love2D-Game-Template"
 
-LOVE_APPIMAGE="../tools/love-11.5-x86_64.AppImage"
-LOVE_WINDOWS="../tools/love-11.5-win64"
-LOVE_JS="../love.js/index.js"
+LOVE_APPIMAGE="tools/love-11.5-x86_64.AppImage"
+LOVE_WINDOWS="tools/love-11.5-win64"
+LOVE_JS="node_modules/love.js/index.js"
 
 BUILD_DIR="build"
 LINUX_DIR="$BUILD_DIR/linux"
@@ -29,8 +29,15 @@ echo "Creating .love..."
 zip -9 -r "$BUILD_DIR/$PROJECT_NAME.love" . \
     -x ".git/*" \
        "build/*" \
-       ".vscode/*.log"
-
+       "node_modules/*" \
+       "tools/*" \
+       "web/*" \
+       ".vscode/*" \
+       "package.json" \
+       "package-lock.json" \
+       "setup.sh" \
+       "build.sh" \
+       "readme.MD"
 # Extract LÖVE runtime
 echo "Extracting LÖVE runtime..."
 "$LOVE_APPIMAGE" --appimage-extract >/dev/null

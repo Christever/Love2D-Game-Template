@@ -4,16 +4,19 @@ set -e
 cd "$(dirname "$0")"
 
 PROJECT_NAME="Love2D-Game-Template"
-LOVE_APPIMAGE="../tools/love-11.5-x86_64.AppImage"
 
+LOVE_APPIMAGE="../tools/love-11.5-x86_64.AppImage"
 LOVE_WINDOWS="../tools/love-11.5-win64"
+LOVE_JS="../love.js/index.js"
 
 BUILD_DIR="build"
 LINUX_DIR="$BUILD_DIR/linux"
 WINDOWS_DIR="$BUILD_DIR/windows"
+WEB_DIR="$BUILD_DIR/web"
 
 LINUX_PACKAGE="$BUILD_DIR/${PROJECT_NAME}-linux"
 WINDOWS_PACKAGE="$BUILD_DIR/${PROJECT_NAME}-windows"
+WEB_PACKAGE="$BUILD_DIR/${PROJECT_NAME}-web"
 
 echo "=== Building $PROJECT_NAME ==="
 
@@ -60,11 +63,19 @@ cat "$WINDOWS_DIR/love.exe" "$BUILD_DIR/$PROJECT_NAME.love" \
 
 rm "$WINDOWS_DIR/love.exe"
 
+# Build Web
+echo "Preparing Web build..."
+rm -rf "$WEB_DIR"
+
+"$LOVE_JS" -c "$BUILD_DIR/$PROJECT_NAME.love" "$WEB_DIR" \
+    -t "$PROJECT_NAME"
+
 # Create distribution packages
 echo "Creating distribution archives..."
 
 mkdir -p "$LINUX_PACKAGE"
 mkdir -p "$WINDOWS_PACKAGE"
+mkdir -p "$WEB_PACKAGE"
 
 # Linux package
 cp "$LINUX_DIR/$PROJECT_NAME" "$LINUX_PACKAGE/"
@@ -74,11 +85,18 @@ cp "$BUILD_DIR/lib/liblove-11.5.so" "$LINUX_PACKAGE/"
 cp "$WINDOWS_DIR"/* "$WINDOWS_PACKAGE/" 
 rm "$WINDOWS_PACKAGE/lovec.exe"
 
+# Web package
+cp -r "$WEB_DIR"/* "$WEB_PACKAGE/"
+
 # Create ZIP archives
 cd "$BUILD_DIR"
 
 zip -9 -r "${PROJECT_NAME}-linux.zip" "${PROJECT_NAME}-linux"
 zip -9 -r "${PROJECT_NAME}-windows.zip" "${PROJECT_NAME}-windows"
+
+cd "${PROJECT_NAME}-web"
+zip -9 -r "../${PROJECT_NAME}-web.zip" .
+cd ..
 
 cd ..
 
@@ -88,3 +106,5 @@ echo "Linux:       $LINUX_DIR/$PROJECT_NAME"
 echo "Linux ZIP:   $BUILD_DIR/${PROJECT_NAME}-linux.zip"
 echo "Windows:     $WINDOWS_DIR/$PROJECT_NAME.exe"
 echo "Windows ZIP: $BUILD_DIR/${PROJECT_NAME}-windows.zip"
+echo "Web:         $WEB_DIR/index.html"
+echo "Web ZIP:     $BUILD_DIR/${PROJECT_NAME}-web.zip"

@@ -1,6 +1,6 @@
 io.stdout:setvbuf("no")
 
-local Game = require("src.Game")
+local Game = require("states.Game")
 
 
 function love.load()

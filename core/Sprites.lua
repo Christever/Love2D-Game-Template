@@ -1,0 +1,3 @@
+local Sprites = {}
+
+return Sprites

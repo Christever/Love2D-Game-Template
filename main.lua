@@ -12,8 +12,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    Game.draw()
-    
+    Game.draw() 
 end
 
 

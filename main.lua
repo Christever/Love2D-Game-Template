@@ -1,3 +1,5 @@
+io.stdout:setvbuf("no")
+
 local Game = require("src.Game")
 
 

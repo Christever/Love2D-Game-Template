@@ -33,15 +33,36 @@ function Menu.update(dt)
 end
 
 function Menu.draw()
-    love.graphics.setFont(FontMedium)
     love.graphics.setBackgroundColor(Color.BLACK)
     love.graphics.setColor(Color.WHITE)
-    for i = 1, #menuEntries do
+    love.graphics.setFont(FontMedium)
+
+    local screenWidth = love.graphics.getWidth()
+    local screenHeight = love.graphics.getHeight()
+
+    local lineHeight = 50
+    local menuHeight = #menuEntries * lineHeight
+    local startY = (screenHeight - menuHeight) / 2
+
+    local menuWidth = 0
+
+    for _, entry in ipairs(menuEntries) do
+        menuWidth = math.max(
+            menuWidth,
+            FontMedium:getWidth(entry.text)
+        )
+    end
+
+    local startX = (screenWidth - menuWidth) / 2
+
+    for i, entry in ipairs(menuEntries) do
+        local y = startY + (i - 1) * lineHeight
+
         if i == menuSelection then
-            love.graphics.print(">", 250, 250 + i * 50)
+            love.graphics.print(">", startX - 25, y)
         end
-        love.graphics.print(menuEntries[i].text, 300, 250 + i * 50)
-        -- love.graphics.printf(menuEntries[i].text, 0,ScreenWidth/5, ScreenWidth, "left" )
+
+        love.graphics.print(entry.text, startX, y)
     end
 end
 
